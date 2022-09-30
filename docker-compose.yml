@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  mysqldb:
+    image: mysql:5.7    
+    container_name: mysqldb2
+    restart: always
+    networks:
+      - compose-bridge
+    environment:
+      MYSQL_DATABASE: escola_ingles
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      MYSQL_TCP_PORT: 3307
+    ports:
+    - 3307:3307
+    volumes:
+      - mysql_db:/var/lib/mysql 
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: pma
+    links:
+      - mysqldb
+    environment:
+      PMA_HOST: mysqldb
+      PMA_PORT: 3307
+      PMA_ARBITRARY: 1
+    networks:
+      - compose-bridge
+    restart: always
+    ports:
+      - 8081:80 
+  app:
+    build: .
+    command: "npm start" 
+    container_name: alura_orm_node
+    restart: always
+    networks:
+      - compose-bridge
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/app 
+    depends_on:
+      - mysqldb
+networks:
+  compose-bridge:
+    driver: bridge
+volumes: 
+  mysql_db:
