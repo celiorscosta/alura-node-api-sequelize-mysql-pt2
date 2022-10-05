@@ -3,8 +3,8 @@ version: '3.9'
 services:
   mysqldb:
     image: mysql:5.7    
-    container_name: mysqldb2
-    restart: always
+    container_name: mysql-db
+    restart: unless-stopped
     networks:
       - compose-bridge
     environment:
@@ -19,7 +19,7 @@ services:
       - mysql_db:/var/lib/mysql 
   phpmyadmin:
     image: phpmyadmin
-    container_name: pma
+    container_name: php-my-admin
     links:
       - mysqldb
     environment:
@@ -28,14 +28,14 @@ services:
       PMA_ARBITRARY: 1
     networks:
       - compose-bridge
-    restart: always
+    restart: unless-stopped
     ports:
       - 8081:80 
   app:
     build: .
     command: "npm start" 
-    container_name: alura_orm_node
-    restart: always
+    container_name: app-node-container
+    restart: unless-stopped
     networks:
       - compose-bridge
     ports:

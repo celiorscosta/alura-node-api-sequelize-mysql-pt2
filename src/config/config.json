@@ -3,7 +3,7 @@
     "username": "exampleuser",
     "password": "examplepass",
     "database": "escola_ingles",
-    "host": "mysqldb2",
+    "host": "mysqldb",
     "port":3307,
     "dialect": "mysql"
   },
